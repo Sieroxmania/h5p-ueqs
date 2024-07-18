@@ -1,41 +1,59 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UEQ-S: Erweiterte Auswertung für H5P "Personality Quiz"</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
-    <style>
-      body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 800px;
-            background-color: #f4f4f4;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        .ueq-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .ueq-item span {
-            flex: 0 0 100px;
-        }
-        .ueq-scale {
-            display: flex;
-            justify-content: space-between;
-            flex: 1;
-            margin: 0 10px;
-        }
-        .ueq-scale input[type="radio"] {
-            margin: 0 5px;
-        }
+
+        <!DOCTYPE html>
+        <html lang="de">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>UEQ-S: Erweiterte Auswertung für H5P "Personality Quiz"</title>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+            <script src="https://smtpjs.com/v3/smtp.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+            <script src="https://smtpjs.com/v3/smtp.js"></script>
+            <style>
+              body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    margin: 0 auto;
+                    padding: 20px;
+                    max-width: 800px;
+                    background-color: #f4f4f4;
+                }
+                h1, h2 {
+                    color: #333;
+                }
+                #ueq-container {
+                max-width: 800px;
+                margin: 0 auto;
+                }
+        
+                .ueq-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+                }
+        
+                .left-label {
+                width: 120px;
+                text-align: right;
+                padding-right: 10px;
+                }
+        
+                .radio-group {
+                display: flex;
+                justify-content: space-between;
+                flex-grow: 1;
+                padding: 0 10px;
+                }
+        
+                .right-label {
+                width: 120px;
+                padding-left: 10px;
+                }
+        
+                input[type="radio"] {
+                margin: 0;
+                }
+                
         label {
             display: block;
             margin-top: 15px;
@@ -48,216 +66,225 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-    </style>
-</head>
-<body>
-    <h1 style="font-size: 24px;">UEQ-S: Erweiterte Auswertung für H5P "Personality Quiz"</h1>
-    
-    <h2 style="font-size: 20px;">1. Einleitung und Ablauf</h2>
-    <p>Hier kommt der Inhalt für den Abschnitt "Einleitung und Ablauf".</p>
-    
-    <h2 style="font-size: 20px;">2. Prototyp</h2>
-    <p>Hier kommt der Inhalt für den Abschnitt "Prototyp".</p>
-    
-<hr style="margin:2rem 0;">
 
-    <h2 style="font-size: 20px;">3. Bitte bewerte den Protoypen</h2>
-    <p>Entscheiden Sie so spontan wie möglich, welcher der folgenden gegensätzlichen Begriffe den Prototypen besser beschreibt. Es gibt keine „richtige“ oder „falsche“ Antwort. Nur Ihre persönliche Meinung zählt!</p>    
-    
-    <h3>2. Demografische Daten</3>
-    <form>
-        <label for="age">Wie ist dein Alter?</label>
-        <input type="text" id="age" name="age">
+            </style>
+        </head>
+        <body>
+            <h1 style="font-size: 24px;">UEQ-S: Erweiterte Auswertung für H5P "Personality Quiz"</h1>
+            
+            <h2 style="font-size: 20px;">1. Einleitung und Ablauf</h2>
+            <p>Hier kommt der Inhalt für den Abschnitt "Einleitung und Ablauf".</p>
+            
+            <h2 style="font-size: 20px;">2. Prototyp</h2>
+            <p>Hier kommt der Inhalt für den Abschnitt "Prototyp".</p>
+            
+        <hr style="margin:2rem 0;">
         
-        <label for="gender">Was ist dein Geschlecht?</label>
-        <select id="gender" name="gender">
-            <option value="none">Keine Antwort</option>
-            <option value="male">Männlich</option>
-            <option value="female">Weiblich</option>
-            <option value="diverse">Divers</option>
-        </select>
+            <h2 style="font-size: 20px;">3. Bitte bewerte den Protoypen</h2>
+            <p>Entscheiden Sie so spontan wie möglich, welcher der folgenden gegensätzlichen Begriffe den Prototypen besser beschreibt. Es gibt keine „richtige“ oder „falsche“ Antwort. Nur Ihre persönliche Meinung zählt!</p>    
+            
+            <h3>2. Demografische Daten</3>
+           
+                <form id="ueq-container">
+                        <label for="age">Wie ist dein Alter?</label>
+                        <input type="text" id="age" name="age">
+                        
+                        <label for="gender">Was ist dein Geschlecht?</label>
+                        <select id="gender" name="gender">
+                            <option value="none">Keine Antwort</option>
+                            <option value="male">Männlich</option>
+                            <option value="female">Weiblich</option>
+                            <option value="diverse">Divers</option>
+                        </select>
+                        
+                        <label for="experience">Hast du Vorerfahrung mit H5P Inhalten?</label>
+                        <select id="experience" name="experience">
+                            <option value="yes">Ja</option>
+                            <option value="no">Nein</option>
+                        </select>
+                        
+                        <hr style="margin:2rem 0;">
+                        
+                        <p>Entscheiden Sie so spontan wie möglich, welcher der folgenden gegensätzlichen Begriffe den Prototypen besser beschreibt. Es gibt keine „richtige" oder „falsche" Antwort. Nur Ihre persönliche Meinung zählt!</p>
         
-        <label for="experience">Hast du Vorerfahrung mit H5P Inhalten?</label>
-        <select id="experience" name="experience">
-            <option value="yes">Ja</option>
-            <option value="no">Nein</option>
-        </select>
-    
-        <h3>3. UEQ-S Fragebogen</h3>
-        <p>Entscheiden Sie so spontan wie möglich, welcher der folgenden gegensätzlichen Begriffe den Prototypen besser beschreibt. Es gibt keine „richtige" oder „falsche" Antwort. Nur Ihre persönliche Meinung zählt!</p>
-        <form id="ueqForm">
-        <div class="ueq-item">
-            <span>behindernd</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>unterstützend</span>
-        </div>
+                     
+                            <div class="ueq-item">
+                                <span class="left-label">behindernd</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item1" value="1">
+                                    <input type="radio" name="item1" value="2">
+                                    <input type="radio" name="item1" value="3">
+                                    <input type="radio" name="item1" value="4">
+                                    <input type="radio" name="item1" value="5">
+                                    <input type="radio" name="item1" value="6">
+                                    <input type="radio" name="item1" value="7">
+                                </div>
+                                <span class="right-label">unterstützend</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">kompliziert</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item2" value="1">
+                                    <input type="radio" name="item2" value="2">
+                                    <input type="radio" name="item2" value="3">
+                                    <input type="radio" name="item2" value="4">
+                                    <input type="radio" name="item2" value="5">
+                                    <input type="radio" name="item2" value="6">
+                                    <input type="radio" name="item2" value="7">
+                                </div>
+                                <span class="right-label">einfach</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">ineffizient</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item3" value="1">
+                                    <input type="radio" name="item3" value="2">
+                                    <input type="radio" name="item3" value="3">
+                                    <input type="radio" name="item3" value="4">
+                                    <input type="radio" name="item3" value="5">
+                                    <input type="radio" name="item3" value="6">
+                                    <input type="radio" name="item3" value="7">
+                                </div>
+                                <span class="right-label">effizient</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">verwirrend</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item4" value="1">
+                                    <input type="radio" name="item4" value="2">
+                                    <input type="radio" name="item4" value="3">
+                                    <input type="radio" name="item4" value="4">
+                                    <input type="radio" name="item4" value="5">
+                                    <input type="radio" name="item4" value="6">
+                                    <input type="radio" name="item4" value="7">
+                                </div>
+                                <span class="right-label">übersichtlich</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">langweilig</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item5" value="1">
+                                    <input type="radio" name="item5" value="2">
+                                    <input type="radio" name="item5" value="3">
+                                    <input type="radio" name="item5" value="4">
+                                    <input type="radio" name="item5" value="5">
+                                    <input type="radio" name="item5" value="6">
+                                    <input type="radio" name="item5" value="7">
+                                </div>
+                                <span class="right-label">spannend</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">uninteressant</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item6" value="1">
+                                    <input type="radio" name="item6" value="2">
+                                    <input type="radio" name="item6" value="3">
+                                    <input type="radio" name="item6" value="4">
+                                    <input type="radio" name="item6" value="5">
+                                    <input type="radio" name="item6" value="6">
+                                    <input type="radio" name="item6" value="7">
+                                </div>
+                                <span class="right-label">interessant</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">konventionell</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item7" value="1">
+                                    <input type="radio" name="item7" value="2">
+                                    <input type="radio" name="item7" value="3">
+                                    <input type="radio" name="item7" value="4">
+                                    <input type="radio" name="item7" value="5">
+                                    <input type="radio" name="item7" value="6">
+                                    <input type="radio" name="item7" value="7">
+                                </div>
+                                <span class="right-label">originell</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">herkömmlich</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item8" value="1">
+                                    <input type="radio" name="item8" value="2">
+                                    <input type="radio" name="item8" value="3">
+                                    <input type="radio" name="item8" value="4">
+                                    <input type="radio" name="item8" value="5">
+                                    <input type="radio" name="item8" value="6">
+                                    <input type="radio" name="item8" value="7">
+                                </div>
+                                <span class="right-label">neuartig</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">behindernd</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item9" value="1">
+                                    <input type="radio" name="item9" value="2">
+                                    <input type="radio" name="item9" value="3">
+                                    <input type="radio" name="item9" value="4">
+                                    <input type="radio" name="item9" value="5">
+                                    <input type="radio" name="item9" value="6">
+                                    <input type="radio" name="item9" value="7">
+                                </div>
+                                <span class="right-label">unterstützend</span>
+                            </div>
+                            
+                            <div class="ueq-item">
+                                <span class="left-label">kompliziert</span>
+                                <div class="radio-group">
+                                    <input type="radio" name="item10" value="1">
+                                    <input type="radio" name="item10" value="2">
+                                    <input type="radio" name="item10" value="3">
+                                    <input type="radio" name="item10" value="4">
+                                    <input type="radio" name="item10" value="5">
+                                    <input type="radio" name="item10" value="6">
+                                    <input type="radio" name="item10" value="7">
+                                </div>
+                                <span class="right-label">einfach</span>
+                            </div>
+                            
+                            <button type="button" onclick="sendEmailWithPDF()" style="margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Als PDF senden</button>
+                
+                        </form>
         
-        <div class="ueq-item">
-            <span>kompliziert</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>einfach</span>
-        </div>
-
-        <div class="ueq-item">
-            <span>ineffizient</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>effizient</span>
-        </div>
-        
-        <div class="ueq-item">
-            <span>verwirrend</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>übersichtlich</span>
-        </div>
-        
-        <div class="ueq-item">
-            <span>langweilig</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>spannend</span>
-        </div>
-        
-        <div class="ueq-item">
-            <span>uninteressant</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>interessant</span>
-        </div>
-        
-        <div class="ueq-item">
-            <span>konventionell</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>originell</span>
-        </div>
-        
-        <div class="ueq-item">
-            <span>herkömmlich</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>neuartig</span>
-        </div>
-        
-        <div class="ueq-item">
-            <span>behindernd</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>unterstützend</span>
-        </div>
-        
-        <div class="ueq-item">
-            <span>kompliziert</span>
-            <div class="ueq-scale">
-                <input type="radio" name="item3" value="1">
-                <input type="radio" name="item3" value="2">
-                <input type="radio" name="item3" value="3">
-                <input type="radio" name="item3" value="4">
-                <input type="radio" name="item3" value="5">
-                <input type="radio" name="item3" value="6">
-                <input type="radio" name="item3" value="7">
-            </div>
-            <span>einfach</span>
-        </div>
-   
-        
-        <button type="button" onclick="sendEmailWithPDF()" style="margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Als PDF senden</button>
-    </form>
-
-    <script>
-   // Function to generate PDF
-function generatePDF() {
-  const doc = new jsPDF();
-  doc.text("Hello World", 10, 10);
-  return doc.output('datauristring');
-}
-
-// Function to send email with PDF attachment
-function sendEmailWithPDF() {
-  const pdfData = generatePDF();
-  
-  Email.send({
-    SecureToken: "d7deeca6-b718-4528-9004-93abde3626d0",
-    To: 'henrik.brauer@stud.th-luebeck.de',
-    From: "henrik.brauer@stud.th-luebeck.de",
-    Subject: "PDF Attachment",
-    Body: "Please find the attached PDF.",
-    Attachments: [
-      {
-        name: "document.pdf",
-        data: pdfData
-      }
-    ]
-  }).then(
-    message => alert("Email sent successfully")
-  );
-}
-    </script>
-</body>
-</html>
+            <script>
+               function sendEmailWithPDF() {
+                    console.log("creating PDF");
+                    // Generate PDF from form
+                    const element = document.getElementById('ueq-container');
+                    if (!element) {
+                        console.error("Element not found");
+                        alert("Formular konnte nicht gefunden werden.");
+                        return;
+                    }
+                    html2pdf().from(element).toPdf().output('datauristring').then(function(pdfData) {
+                        console.log("sending mail");
+                        // Send email with the PDF attachment
+                        Email.send({
+                            SecureToken: "d7deeca6-b718-4528-9004-93abde3626d0",
+                            To: 'henrik.brauer@stud.th-luebeck.de',
+                            From: "henrik.brauer@stud.th-luebeck.de",
+                            Subject: "PDF Attachment",
+                            Body: "Please find the attached PDF.",
+                            Attachments: [
+                                {
+                                    name: "document.pdf",
+                                    data: pdfData.split(',')[1] // Extract base64 part from data URI
+                                }
+                            ]
+                        }).then(
+                            message => alert("Email sent successfully"),
+                            error => alert("Failed to send email: " + error)
+                        );
+                    }).catch(function(error) {
+                        console.error("Error generating PDF: ", error);
+                    });
+                }
+            </script>
+        </body>
+        </html>
